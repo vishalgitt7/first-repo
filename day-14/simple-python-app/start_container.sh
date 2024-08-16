@@ -2,7 +2,5 @@
 set -e
 
 # Pull the Docker image from Docker Hub
-echo
+docker pull vishaldock7/simple-python-flask-app:latest
 
-# Run the Docker image as a container
-echo
