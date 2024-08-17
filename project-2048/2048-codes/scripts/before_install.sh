@@ -18,5 +18,5 @@ then
 fi
 
 # Pull the Docker image from your registry
-docker pull <your-account-id>.dkr.ecr.<your-region>.amazonaws.com/<your-repository-name>:<your-tag>
+docker pull vishaldock7/<nameoftheimage:version>
 
