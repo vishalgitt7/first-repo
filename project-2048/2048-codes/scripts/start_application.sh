@@ -1,6 +1,7 @@
 #!/bin/bash
-# This script handles the Kubernetes deployment
+# /root/2048-scripts/scripts/start_application.sh
 
-# Apply Kubernetes manifests
-kubectl apply -f /home/ec2-user/my-app/k8s/deployment.yaml
-kubectl apply -f /home/ec2-user/my-app/k8s/service.yaml
+# Apply the Kubernetes manifests
+kubectl apply -f /root/2048-scripts/scripts/deployment.yaml
+kubectl apply -f /root/2048-scripts/scripts/service.yaml
+

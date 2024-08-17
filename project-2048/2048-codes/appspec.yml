@@ -1,18 +1,23 @@
 version: 0.0
 os: linux
+files:
+  - source: /scripts
+    destination: /root/2048-scripts/scripts
 
 hooks:
   BeforeInstall:
-    - location: scripts/before_install.sh
+    - location: /root/2048-scripts/scripts/before_install.sh
       timeout: 300
       runas: root
-
   AfterInstall:
-    - location: scripts/after_install.sh
+    - location: /root/2048-scripts/scripts/after_install.sh
       timeout: 300
       runas: root
-
   ApplicationStart:
-    - location: scripts/start_application.sh
+    - location: /root/2048-scripts/scripts/start_application.sh
+      timeout: 300
+      runas: root
+  ValidateService:
+    - location: /root/2048-scripts/scripts/validate_service.sh
       timeout: 300
       runas: root
