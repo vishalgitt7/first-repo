@@ -3,9 +3,9 @@ module "eks" {
   cluster_name    = "my-eks-cluster"
   cluster_version = "1.21"
   vpc_id           = var.vpc_id
-  subnets_id          = var.public_subnets  # Use private_subnets if required by your setup
+  subnets_ids          = var.public_subnets  # Use private_subnets if required by your setup
 
-  node_group = {
+  node_groups = {
     eks_nodes = {
       desired_capacity = 2
       max_capacity     = 3
