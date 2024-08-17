@@ -18,5 +18,5 @@ then
 fi
 
 # Pull the Docker image from your registry
-docker pull vishaldock7/<nameoftheimage:version>
+docker pull vishaldock7/2048-app-image:latest
 
