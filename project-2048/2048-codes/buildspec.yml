@@ -13,7 +13,7 @@ phases:
     commands:
       - echo "Installing dependencies..."
       - pip install -r project-2048/2048-codes/requirements.txt
-      - echo "Logging into the Docker"
+      - echo "Logging into the Docker..."
       - docker login $DOCKER_REGISTRY_URL --username $DOCKER_REGISTRY_USERNAME --password $DOCKER_REGISTRY_PASSWORD
   build:
     commands:
