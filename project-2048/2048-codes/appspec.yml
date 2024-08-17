@@ -17,7 +17,3 @@ hooks:
     - location: /root/2048-scripts/scripts/start_application.sh
       timeout: 300
       runas: root
-  ValidateService:
-    - location: /root/2048-scripts/scripts/validate_service.sh
-      timeout: 300
-      runas: root
