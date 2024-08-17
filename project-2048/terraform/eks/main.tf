@@ -5,8 +5,8 @@ module "eks" {
   vpc_id           = var.vpc_id
   subnet_ids          = var.public_subnets  # Use private_subnets if required by your setup
 
-  node_groups = {
-    eks_nodes = {
+  eks_managed_node_groups = {
+    node_group = {
       desired_capacity = 2
       max_capacity     = 3
       min_capacity     = 1
