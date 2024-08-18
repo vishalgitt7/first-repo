@@ -2,7 +2,7 @@
 # This script runs after the installation process
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 unzip awscliv2.zip
-sudo yum install unzip -y
+yum install unzip -y
 sudo ./aws/install
 
 # Configure access to the Kubernetes cluster
