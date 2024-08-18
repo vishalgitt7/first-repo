@@ -6,14 +6,14 @@ files:
 
 hooks:
   BeforeInstall:
-    - location: /root/2048-scripts/scripts/before_install.sh
+    - location: scripts/before_install.sh
       timeout: 300
       runas: root
   AfterInstall:
-    - location: /root/2048-scripts/scripts/after_install.sh
+    - location: scripts/after_install.sh
       timeout: 300
       runas: root
   ApplicationStart:
-    - location: /root/2048-scripts/scripts/start_application.sh
+    - location: scripts/start_application.sh
       timeout: 300
       runas: root
