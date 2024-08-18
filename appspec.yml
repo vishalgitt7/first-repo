@@ -1,8 +1,5 @@
 version: 0.0
 os: linux
-files:
-  - source: /scripts
-    destination: /root/2048-scripts/scripts
 
 hooks:
   BeforeInstall:
