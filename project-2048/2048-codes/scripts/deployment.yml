@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: python-app
-        image: <your-account-id>.dkr.ecr.<your-region>.amazonaws.com/my-python-app:latest
+        image: docker.io/2048-app-image:latest
         ports:
         - containerPort: 5000
