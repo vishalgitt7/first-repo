@@ -7,4 +7,5 @@ sudo ./aws/install
 #snap install aws-cli
 
 # Configure access to the Kubernetes cluster
-aws eks --region us-east-1 update-kubeconfig --name 2048-eks-WbeQJfwY
+#to configure access to eks you should configure aws 1st
+#aws eks --region us-east-1 update-kubeconfig --name 2048-eks-WbeQJfwY
