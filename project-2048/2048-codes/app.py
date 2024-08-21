@@ -1,99 +1,93 @@
 
+
+
+from flask import Flask, render_template, jsonify, request
 import random
-import os
 
-class Game2048:
-    def __init__(self):
-        self.grid_size = 4
-        self.grid = [[0] * self.grid_size for _ in range(self.grid_size)]
-        self.add_new_tile()
-        self.add_new_tile()
+app = Flask(__name__)
 
-    def add_new_tile(self):
-        empty_cells = [(i, j) for i in range(self.grid_size) for j in range(self.grid_size) if self.grid[i][j] == 0]
-        if empty_cells:
-            i, j = random.choice(empty_cells)
-            self.grid[i][j] = 4 if random.random() > 0.9 else 2
+SIZE = 4
 
-    def compress(self):
-        new_grid = [[0] * self.grid_size for _ in range(self.grid_size)]
-        for i in range(self.grid_size):
-            pos = 0
-            for j in range(self.grid_size):
-                if self.grid[i][j] != 0:
-                    new_grid[i][pos] = self.grid[i][j]
-                    pos += 1
-        self.grid = new_grid
+# Initialize the game board
+def initialize_game():
+    board = [[0] * SIZE for _ in range(SIZE)]
+    add_new_tile(board)
+    add_new_tile(board)
+    return board
 
-    def merge(self):
-        for i in range(self.grid_size):
-            for j in range(self.grid_size - 1):
-                if self.grid[i][j] == self.grid[i][j + 1] and self.grid[i][j] != 0:
-                    self.grid[i][j] *= 2
-                    self.grid[i][j + 1] = 0
+# Add a new tile (2 or 4) to the board
+def add_new_tile(board):
+    empty_tiles = [(i, j) for i in range(SIZE) for j in range(SIZE) if board[i][j] == 0]
+    if empty_tiles:
+        i, j = random.choice(empty_tiles)
+        board[i][j] = random.choice([2, 4])
 
-    def reverse(self):
-        for i in range(self.grid_size):
-            self.grid[i] = self.grid[i][::-1]
+# Shift all numbers in the row left
+def compress(row):
+    new_row = [num for num in row if num != 0]
+    new_row += [0] * (SIZE - len(new_row))
+    return new_row
 
-    def transpose(self):
-        self.grid = [list(row) for row in zip(*self.grid)]
+# Merge tiles for the left move
+def merge(row):
+    for i in range(SIZE - 1):
+        if row[i] == row[i + 1] and row[i] != 0:
+            row[i] *= 2
+            row[i + 1] = 0
+    return row
 
-    def move_left(self):
-        self.compress()
-        self.merge()
-        self.compress()
+# Execute a move left
+def move_left(board):
+    new_board = []
+    for row in board:
+        compressed_row = compress(row)
+        merged_row = merge(compressed_row)
+        final_row = compress(merged_row)
+        new_board.append(final_row)
+    return new_board
 
-    def move_right(self):
-        self.reverse()
-        self.move_left()
-        self.reverse()
+# Rotate the board to help with directional moves
+def rotate_board(board):
+    return [list(row) for row in zip(*board[::-1])]
 
-    def move_up(self):
-        self.transpose()
-        self.move_left()
-        self.transpose()
+# Handle moves in different directions
+def move(board, direction):
+    for _ in range(direction):
+        board = rotate_board(board)
+    board = move_left(board)
+    for _ in range(4 - direction):
+        board = rotate_board(board)
+    return board
 
-    def move_down(self):
-        self.transpose()
-        self.move_right()
-        self.transpose()
+# Check if any moves are possible
+def is_game_over(board):
+    if any(0 in row for row in board):
+        return False
+    for i in range(SIZE):
+        for j in range(SIZE - 1):
+            if board[i][j] == board[i][j + 1] or board[j][i] == board[j + 1][i]:
+                return False
+    return True
 
-    def is_game_over(self):
-        for i in range(self.grid_size):
-            for j in range(self.grid_size):
-                if self.grid[i][j] == 0:
-                    return False
-                if j < self.grid_size - 1 and self.grid[i][j] == self.grid[i][j + 1]:
-                    return False
-                if i < self.grid_size - 1 and self.grid[i][j] == self.grid[i + 1][j]:
-                    return False
-        return True
+# Flask routes
+@app.route('/')
+def index():
+    return render_template('index.html')
 
-    def display(self):
-        os.system('clear')
-        for row in self.grid:
-            print('\t'.join(str(num) if num != 0 else '.' for num in row))
-        print()
+@app.route('/start', methods=['GET'])
+def start_game():
+    board = initialize_game()
+    return jsonify({'board': board})
 
-    def play(self):
-        while not self.is_game_over():
-            self.display()
-            move = input("Enter move (WASD): ").lower()
-            if move == 'w':
-                self.move_up()
-            elif move == 'a':
-                self.move_left()
-            elif move == 's':
-                self.move_down()
-            elif move == 'd':
-                self.move_right()
-            else:
-                continue
-            self.add_new_tile()
-        print("Game Over!")
+@app.route('/move', methods=['POST'])
+def make_move():
+    board = request.json.get('board')
+    direction = request.json.get('direction')  # 0: left, 1: up, 2: right, 3: down
+    board = move(board, direction)
+    if any(0 in row for row in board):
+        add_new_tile(board)
+    game_over = is_game_over(board)
+    return jsonify({'board': board, 'game_over': game_over})
 
-if __name__ == "__main__":
-    game = Game2048()
-    game.play()
-
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)

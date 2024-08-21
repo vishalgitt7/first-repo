@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2048 Game</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        table { margin: 20px auto; border-collapse: collapse; }
+        td { width: 100px; height: 100px; font-size: 24px; text-align: center; vertical-align: middle; border: 1px solid #ccc; }
+    </style>
+</head>
+<body>
+    <h1>2048 Game</h1>
+    <table id="board"></table>
+    <p id="game-over" style="display:none;">Game Over!</p>
+    <script>
+        let board;
+
+        function renderBoard(board) {
+            const table = document.getElementById('board');
+            table.innerHTML = '';
+            for (let row of board) {
+                const tr = document.createElement('tr');
+                for (let cell of row) {
+                    const td = document.createElement('td');
+                    td.textContent = cell !== 0 ? cell : '';
+                    tr.appendChild(td);
+                }
+                table.appendChild(tr);
+            }
+        }
+
+        async function startGame() {
+            const response = await fetch('/start');
+            const data = await response.json();
+            board = data.board;
+            renderBoard(board);
+        }
+
+        async function makeMove(direction) {
+            const response = await fetch('/move', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ board, direction })
+            });
+            const data = await response.json();
+            board = data.board;
+            renderBoard(board);
+            if (data.game_over) {
+                document.getElementById('game-over').style.display = 'block';
+            }
+        }
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowLeft') makeMove(0);
+            if (event.key === 'ArrowUp') makeMove(1);
+            if (event.key === 'ArrowRight') makeMove(2);
+            if (event.key === 'ArrowDown') makeMove(3);
+        });
+
+        startGame();
+    </script>
+</body>
+</html>
