@@ -26,5 +26,5 @@ variable "node_role_name" {
 variable "subnet_ids" {
  description = "List of subnet IDs for the EKS cluster"
  type = list(string)
- default = ["subnet-028f7b6371db11e60", "subnet-09ece472dcb4f6d19" ]
+ default = ["your subnetID-1", "your subnetID-2" ]
  }
