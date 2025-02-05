@@ -21,7 +21,7 @@ jobs:
       # Run the Python application (optional, if needed for testing or setup).
       - run:
           name: Run Python application
-          command: python app.py
+          command: python project-2048/2048-codes/app.py
 
       # Login to Docker Hub.
       - run:
