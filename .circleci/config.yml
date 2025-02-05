@@ -12,6 +12,38 @@ jobs:
       # Specify the version you desire here
       # See: https://circleci.com/developer/images/image/cimg/base
       - image: cimg/base:current
+    build-and-push:
+    docker:
+      - image: cimg/python:3.9
+    steps:
+      - checkout
+      - run: python app.py
+
+      # Install Python dependencies (if any)
+      - run:
+          name: Install Python dependencies
+          command: |
+            python -m pip install --upgrade pip
+            pip install -r requirements.txt  
+      - run: python app.py
+
+      # Login to Docker Hub
+      - run:
+          name: Login to Docker Hub
+          command: |
+            echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+
+      # Build Docker image
+      - run:
+          name: Build Docker image
+          command: |
+            docker build -t vishaldock7/2048-game:latest .
+
+      # Push Docker image to Docker Hub
+      - run:
+          name: Push Docker image to Docker Hub
+          command: |
+            docker push vishaldock7/2048-game:latest
 
     # Add steps to the job
     # See: https://circleci.com/docs/jobs-steps/#steps-overview & https://circleci.com/docs/configuration-reference/#steps
