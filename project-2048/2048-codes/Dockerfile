@@ -21,6 +21,6 @@ COPY nginx.conf /etc/nginx/sites-enabled/
 # Expose port 80
 EXPOSE 80
 EXPOSE 5000
-
+ENV FLASK_ENV=production
 # Start Nginx and the Flask app
 CMD service nginx start && gunicorn --workers 3 --bind 0.0.0.0:5000 app:app
