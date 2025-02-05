@@ -16,7 +16,7 @@ jobs:
           name: Install Python dependencies
           command: |
             python -m pip install --upgrade pip
-            pip install -r requirements.txt  # If you have a requirements.txt file
+            pip install -r project-2048/2048-codes/requirements.txt  # If you have a requirements.txt file
 
       # Run the Python application (optional, if needed for testing or setup).
       - run:
