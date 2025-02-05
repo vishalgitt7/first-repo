@@ -1,4 +1,5 @@
 from flask import Flask, render_template
+import os
 
 app = Flask(__name__, static_folder='static')
 
@@ -7,10 +8,10 @@ def home():
     return render_template("index.html")
 
 if __name__ == "__main__":
-    import os
+    print(f"Current environment: {os.getenv('FLASK_ENV', 'development')}")
+    
     from waitress import serve  # Waitress for production
     
-    # Get environment mode (development or production)
     env = os.getenv("FLASK_ENV", "development")
     
     if env == "production":
