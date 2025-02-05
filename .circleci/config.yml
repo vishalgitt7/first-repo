@@ -17,6 +17,9 @@ jobs:
           command: |
             python -m pip install --upgrade pip
             pip install -r project-2048/2048-codes/requirements.txt  # If you have a requirements.txt file
+      - run:
+          name: Set environment to production
+          command: echo "FLASK_ENV=production" >> $BASH_ENV
 
       # Run the Python application (optional, if needed for testing or setup).
       - run:
